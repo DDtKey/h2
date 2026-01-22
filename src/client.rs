@@ -1679,9 +1679,10 @@ impl proto::Peer for Peer {
 
         let mut response = match b.body(()) {
             Ok(response) => response,
-            Err(_) => {
+            Err(e) => {
                 // TODO: Should there be more specialized handling for different
                 // kinds of errors
+                proto_err!(stream: "error building response: {}; stream={:?}", e, stream_id);
                 return Err(Error::library_reset(stream_id, Reason::PROTOCOL_ERROR));
             }
         };
